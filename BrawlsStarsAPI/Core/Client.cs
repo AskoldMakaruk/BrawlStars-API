@@ -10,7 +10,7 @@ namespace BrawlsStarsAPI.Core
     public class Client
     {
         public string Token { get; }
-        private string name => "brawlstats | Python";
+        private string name => "brawlstats | C#";
         private HttpClient client = new HttpClient();
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace BrawlsStarsAPI.Core
         /// Get a club’s stats.
         /// </summary>
         /// <param name="tag">A valid club tag. Valid characters: 0289PYLQGRJCUV</param>
-        public async Task<Club> GetClub(string tag)
+        public async Task<Club> GetClubAsync(string tag)
         {
             Club club = null;
             HttpResponseMessage response = await client.GetAsync(Utils.Club + "?tag=" + tag);
@@ -62,7 +62,7 @@ namespace BrawlsStarsAPI.Core
         /// <summary>
         /// Get current and upcoming events.
         /// </summary>
-        public async Task<Events> GetEvents()
+        public async Task<Events> GetEventsAsync()
         {
             HttpResponseMessage response = await client.GetAsync(Utils.Events);
             if (response.IsSuccessStatusCode)
@@ -77,7 +77,7 @@ namespace BrawlsStarsAPI.Core
         /// </summary>
         /// <param name="type">The type of leaderboard. Must be “players”, “clubs”, or the brawler leaderboard you are trying to access. Anything else will return a ValueError.</param>
         /// <param name="count">The number of top players or clubs to fetch. If count > 200, it will return a ValueError.</param>
-        public async Task<Leaderboard> GetLeaderboard(string type, int count)
+        public async Task<Leaderboard> GetLeaderboardAsync(string type, int count)
         {
             bool brawler = Utils.Brawlers.Contains(type);
             HttpResponseMessage response = await client.GetAsync($"{Utils.Leaderboard}/{(brawler ? "player" : type)}?count={count}{(brawler ? "&brawler=" + type : "")}");
@@ -91,7 +91,7 @@ namespace BrawlsStarsAPI.Core
         /// <summary>
         /// Gets misc data such as shop and season info.
         /// </summary>
-        public async Task<Misc> GetMisc()
+        public async Task<Misc> GetMiscAsync()
         {
             HttpResponseMessage response = await client.GetAsync(Utils.Misc);
             if (response.IsSuccessStatusCode)
@@ -106,12 +106,12 @@ namespace BrawlsStarsAPI.Core
         /// </summary>
         /// <param name="name">The query for the club search.</param>
         /// <returns></returns>
-        public async Task<string> SearchClub(string name)
+        public async Task<SearchClub[]> SearchClubAsync(string name)
         {
             HttpResponseMessage response = await client.GetAsync(Utils.ClubSearch + "?query=" + name);
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsStringAsync();
+                return SearchClub.FromJson(await response.Content.ReadAsStringAsync());
             }
             return null;
         }

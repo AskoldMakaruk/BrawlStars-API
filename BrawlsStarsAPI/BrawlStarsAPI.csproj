@@ -7,6 +7,14 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>KvasDimas</Authors>
     <Company>KvasDimas Inc</Company>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/AskoldMakaruk/BrawlStars-API</RepositoryUrl>
+    <RepositoryType>Open</RepositoryType>
+    <PackageTags>Supercell, BrawlStars</PackageTags>
+    <Description>BrawlStars API based on https://github.com/SharpBit/brawlstats</Description>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

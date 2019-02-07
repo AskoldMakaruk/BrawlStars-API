@@ -25,5 +25,14 @@ namespace BrawlStars.Model
         [JsonProperty("type")]
         public string Type { get; set; }
     }
+    public partial class SearchClub
+    {
+        public static SearchClub[] FromJson(string json) => JsonConvert.DeserializeObject<SearchClub[]>(json);
+    }
+
+    public static class Serialize
+    {
+        public static string ToJson(this Club[] self) => JsonConvert.SerializeObject(self);
+    }
 }
 

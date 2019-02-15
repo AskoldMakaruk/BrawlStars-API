@@ -1,17 +1,14 @@
-﻿using BrawlStars.Model;
+﻿using BrawlStarsAPI.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Globalization;
-namespace BrawlsStarsAPI.Model
+namespace BrawlStarsAPI.Model
 {
     public partial class Club
     {
         [JsonProperty("tag")]
         public string Tag { get; set; }
-
-        [JsonProperty("id")]
-        public Id Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -49,9 +46,6 @@ namespace BrawlsStarsAPI.Model
 
     public partial class Member
     {
-        [JsonProperty("id")]
-        public Id Id { get; set; }
-
         [JsonProperty("tag")]
         public string Tag { get; set; }
 

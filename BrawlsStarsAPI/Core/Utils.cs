@@ -1,6 +1,6 @@
-﻿using BrawlStars.Exceptions;
+﻿using BrawlStarsAPI.Exceptions;
 
-namespace BrawlStars.Core
+namespace BrawlStarsAPI.Core
 {
     internal static class Utils
     {
@@ -25,19 +25,19 @@ namespace BrawlStars.Core
             "leon"
         };
 
-        public static bool ConfirmTag(string tag)
+        public static string ConfirmTag(string tag)
         {
             var tg = tag.ToUpper().Replace("O", "0").Replace("#", "");
             var allowed = "0289PYLQGRJCUV";
             if (tag.Length < 3)
             {
-                return false;
+                return "";
             }
 
             foreach (char c in tg)
                 if (!allowed.Contains(c))
                     throw new NotFoundError(c.ToString());
-            return true;
+            return tg;
         }
     }
 }

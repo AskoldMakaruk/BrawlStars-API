@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BrawlStars.Exceptions
+namespace BrawlStarsAPI.Exceptions
 {
     [Serializable]
     public class NotFoundError : Exception

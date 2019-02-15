@@ -1,12 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace BrawlStars.Model
+namespace BrawlStarsAPI.Model
 {
     public partial class SearchClub
     {
-        [JsonProperty("id")]
-        public Id Id { get; set; }
-
         [JsonProperty("tag")]
         public string Tag { get; set; }
 

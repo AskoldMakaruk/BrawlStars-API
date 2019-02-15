@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace BrawlStars.Model
+namespace BrawlStarsAPI.Model
 {
     public partial class Events
     {

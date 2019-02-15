@@ -1,16 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace BrawlStars.Model
+namespace BrawlStarsAPI.Model
 {
 
     public partial class Player
     {
         [JsonProperty("tag")]
         public string Tag { get; set; }
-
-        [JsonProperty("id")]
-        public Id Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -61,41 +58,13 @@ namespace BrawlStars.Model
         public bool HasSkins { get; set; }
 
         [JsonProperty("club")]
-        public Club Club { get; set; }
+        public PlayerClub Club { get; set; }
 
         [JsonProperty("brawlers")]
         public Brawler[] Brawlers { get; set; }
     }
-
-    public partial class Brawler
+    public partial class PlayerClub
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("hasSkin")]
-        public bool HasSkin { get; set; }
-
-        [JsonProperty("skin")]
-        public string Skin { get; set; }
-
-        [JsonProperty("trophies")]
-        public long Trophies { get; set; }
-
-        [JsonProperty("highestTrophies")]
-        public long HighestTrophies { get; set; }
-
-        [JsonProperty("power")]
-        public long Power { get; set; }
-
-        [JsonProperty("level")]
-        public long Level { get; set; }
-    }
-
-    public partial class Club
-    {
-        [JsonProperty("id")]
-        public Id Id { get; set; }
-
         [JsonProperty("tag")]
         public string Tag { get; set; }
 
@@ -123,13 +92,28 @@ namespace BrawlStars.Model
         [JsonProperty("onlineMembers")]
         public long OnlineMembers { get; set; }
     }
-
-    public partial class Id
+    public partial class Brawler
     {
-        [JsonProperty("high")]
-        public long High { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
 
-        [JsonProperty("low")]
-        public long Low { get; set; }
+        [JsonProperty("hasSkin")]
+        public bool HasSkin { get; set; }
+
+        [JsonProperty("skin")]
+        public string Skin { get; set; }
+
+        [JsonProperty("trophies")]
+        public long Trophies { get; set; }
+
+        [JsonProperty("highestTrophies")]
+        public long HighestTrophies { get; set; }
+
+        [JsonProperty("power")]
+        public long Power { get; set; }
+
+        [JsonProperty("level")]
+        public long Level { get; set; }
     }
+    
 }

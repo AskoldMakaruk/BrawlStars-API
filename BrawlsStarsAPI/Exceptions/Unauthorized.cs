@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BrawlStars.Exceptions
+namespace BrawlStarsAPI.Exceptions
 {
     [Serializable]
     public class Unauthorized : Exception

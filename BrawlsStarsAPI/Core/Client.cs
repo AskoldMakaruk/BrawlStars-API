@@ -1,30 +1,29 @@
-﻿using BrawlStars.Core;
-using BrawlStars.Model;
+﻿using BrawlStarsAPI.Core;
+using BrawlStarsAPI.Model;
 using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace BrawlsStarsAPI.Core
+namespace BrawlStarsAPI.Core
 {
-    public class Client
+    public class Client : IDisposable
     {
         public string Token { get; }
-        private string name => "brawlstats | C#";
-        private HttpClient client = new HttpClient();
+        private string name => "brawlstats| C#";
+        private HttpClient client;
 
         /// <summary>
         /// Creates new Client.
         /// </summary>
         /// <param name="token">Can be generated in Discord with bot BrawlAPI#8520</param>
-        public Client(string token)
+        public  Client(string token)
         {
             Token = token;
-            Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkaXNjb3JkX3VzZXJfaWQiOiIzNjY1Nzk2MjA5NTIyNzY5OTQiLCJpYXQiOjE1NDk1Mjk3NDh9.m1_6Nwfl_5gT6VxERs-Bj26kvLRYxsSOIbLfEVsX42U";
-
+            client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(10);
             client.DefaultRequestHeaders.Add("User-Agent", name);
             client.DefaultRequestHeaders.Add("Authorization", Token);
-
             client.BaseAddress = new Uri(Utils.Base);
         }
 
@@ -50,6 +49,7 @@ namespace BrawlsStarsAPI.Core
         /// <param name="tag">A valid club tag. Valid characters: 0289PYLQGRJCUV</param>
         public async Task<Club> GetClubAsync(string tag)
         {
+            tag = Utils.ConfirmTag(tag);
             Club club = null;
             HttpResponseMessage response = await client.GetAsync(Utils.Club + "?tag=" + tag);
             if (response.IsSuccessStatusCode)
@@ -116,5 +116,9 @@ namespace BrawlsStarsAPI.Core
             return null;
         }
 
+        public void Dispose()
+        {
+            client.Dispose();
+        }
     }
 }

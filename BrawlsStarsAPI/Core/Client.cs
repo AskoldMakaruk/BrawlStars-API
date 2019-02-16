@@ -51,12 +51,12 @@ namespace BrawlStarsAPI.Core
         public async Task<Club> GetClubAsync(string tag)
         {
             tag = Utils.ConfirmTag(tag);
-            Club club = null;
+            
             HttpResponseMessage response = await client.GetAsync(Utils.Club + "?tag=" + tag);
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                club = Club.FromJson(json);
+                return Club.FromJson(json);
             }
             return null;
         }

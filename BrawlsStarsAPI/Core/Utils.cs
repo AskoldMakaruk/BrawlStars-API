@@ -1,4 +1,4 @@
-﻿using BrawlStarsAPI.Exceptions;
+﻿using BrawlStars.Exceptions;
 
 namespace BrawlStarsAPI.Core
 {
@@ -24,20 +24,61 @@ namespace BrawlStarsAPI.Core
             "tara","spike","crow",
             "leon"
         };
-
+        public static string LeaderboardToString(LeaderboardType type)
+        {
+            int t = (int) type;
+            int i = t - 2;
+            if (i >= 0)
+            {
+                return Brawlers[i];
+            }
+            else if (t >= 0 && t <= 1)
+            {
+                return type.ToString().ToLower();
+            }
+            else return null;
+        }
         public static string ConfirmTag(string tag)
         {
             var tg = tag.ToUpper().Replace("O", "0").Replace("#", "");
             var allowed = "0289PYLQGRJCUV";
             if (tag.Length < 3)
             {
-                return "";
+                throw new TagFormat();
             }
 
             foreach (char c in tg)
                 if (!allowed.Contains(c))
-                    throw new NotFoundError(c.ToString());
+                    throw new TagFormat(c.ToString());
             return tg;
         }
+    }
+
+    public enum LeaderboardType
+    {
+        Players,
+        Clubs,
+        Shelly,
+        Nita,
+        Colt,
+        Bull,
+        Jessie,
+        Brock,
+        Dynamike,
+        Bo,
+        ElPrimo,
+        Barley,
+        Poco,
+        Ricochet,
+        Penny,
+        Darryl,
+        Frank,
+        Pam,
+        Piper,
+        Mortis,
+        Tara,
+        Spike,
+        Crow,
+        Leon
     }
 }

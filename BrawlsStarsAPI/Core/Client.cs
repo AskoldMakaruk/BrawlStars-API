@@ -1,7 +1,5 @@
-﻿using BrawlStarsAPI.Core;
-using BrawlStarsAPI.Model;
+﻿using BrawlStarsAPI.Model;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -17,7 +15,7 @@ namespace BrawlStarsAPI.Core
         /// Creates new Client.
         /// </summary>
         /// <param name="token">Can be generated in Discord with bot BrawlAPI#8520</param>
-        public  Client(string token)
+        public Client(string token)
         {
             Token = token;
             client = new HttpClient();
@@ -31,22 +29,25 @@ namespace BrawlStarsAPI.Core
         /// Get a player’s stats.
         /// </summary>
         /// <param name="tag">A valid player tag. Valid characters: 0289PYLQGRJCUV</param>
-        public async Task<Player> GetPlayerAsync(string tag)
+        /// <returns>Profile or null if not found</returns>
+        public async Task<Profile> GetPlayerAsync(string tag)
         {
-            Player player = null;
+            tag = Utils.ConfirmTag(tag);
             HttpResponseMessage response = await client.GetAsync(Utils.Profile + "?tag=" + tag);
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsAsync<Player>();
+                var json = await response.Content.ReadAsStringAsync();
+                return Profile.FromJson(json);
             }
-            return player;
 
+            return null;
         }
 
         /// <summary>
         /// Get a club’s stats.
         /// </summary>
-        /// <param name="tag">A valid club tag. Valid characters: 0289PYLQGRJCUV</param>
+        /// <param name="tag">A valid club tag. Valid characters: 0289PYLQGRJCUV</param> 
+        /// <returns>Clubs or null if not found</returns>
         public async Task<Club> GetClubAsync(string tag)
         {
             tag = Utils.ConfirmTag(tag);
@@ -54,20 +55,24 @@ namespace BrawlStarsAPI.Core
             HttpResponseMessage response = await client.GetAsync(Utils.Club + "?tag=" + tag);
             if (response.IsSuccessStatusCode)
             {
-                club = await response.Content.ReadAsAsync<Club>();
+                var json = await response.Content.ReadAsStringAsync();
+                club = Club.FromJson(json);
             }
-            return club;
+            return null;
         }
 
         /// <summary>
         /// Get current and upcoming events.
         /// </summary>
+        /// <returns>Set of current and upcoming events (maps)</returns>
         public async Task<Events> GetEventsAsync()
         {
             HttpResponseMessage response = await client.GetAsync(Utils.Events);
+            //todo throw
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsAsync<Events>();
+                var json = await response.Content.ReadAsStringAsync();
+                return Events.FromJson(json);
             }
             return null;
         }
@@ -75,15 +80,19 @@ namespace BrawlStarsAPI.Core
         /// <summary>
         /// Get the top count players/clubs/brawlers.
         /// </summary>
-        /// <param name="type">The type of leaderboard. Must be “players”, “clubs”, or the brawler leaderboard you are trying to access. Anything else will return a ValueError.</param>
+        /// <param name="type">Type of leaderboard.</param>
         /// <param name="count">The number of top players or clubs to fetch. If count > 200, it will return a ValueError.</param>
-        public async Task<Leaderboard> GetLeaderboardAsync(string type, int count)
+        public async Task<Leaderboard[]> GetLeaderboardAsync(LeaderboardType type, int count)
         {
-            bool brawler = Utils.Brawlers.Contains(type);
-            HttpResponseMessage response = await client.GetAsync($"{Utils.Leaderboard}/{(brawler ? "player" : type)}?count={count}{(brawler ? "&brawler=" + type : "")}");
+            string s = Utils.LeaderboardToString(type);
+            bool isbrawler = (int) type > 1;
+            string req = $"{Utils.Leaderboard}/{(isbrawler ? "players" : s)}?count={count}{(isbrawler ? "&brawler=" + type : "")}";
+        
+            HttpResponseMessage response = await client.GetAsync(req);
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsAsync<Leaderboard>();
+                var json = await response.Content.ReadAsStringAsync();
+                return Leaderboard.FromJson(json);
             }
             return null;
         }
@@ -96,7 +105,8 @@ namespace BrawlStarsAPI.Core
             HttpResponseMessage response = await client.GetAsync(Utils.Misc);
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadAsAsync<Misc>();
+                var json = await response.Content.ReadAsStringAsync();
+                return Misc.FromJson(json);
             }
             return null;
         }
@@ -109,6 +119,10 @@ namespace BrawlStarsAPI.Core
         public async Task<SearchClub[]> SearchClubAsync(string name)
         {
             HttpResponseMessage response = await client.GetAsync(Utils.ClubSearch + "?query=" + name);
+
+            var json = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(json);
+
             if (response.IsSuccessStatusCode)
             {
                 return SearchClub.FromJson(await response.Content.ReadAsStringAsync());

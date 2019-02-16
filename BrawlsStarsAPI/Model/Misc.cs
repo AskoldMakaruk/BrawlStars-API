@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
+using System.Globalization;
 
 namespace BrawlStarsAPI.Model
 {
@@ -22,5 +24,23 @@ namespace BrawlStarsAPI.Model
 
         [JsonProperty("serverDateDayOfYear")]
         public long ServerDateDayOfYear { get; set; }
+    }
+
+    public partial class Misc
+    {
+        public static Misc FromJson(string json) => JsonConvert.DeserializeObject<Misc>(json, BrawlStarsAPI.Model.Converter.Settings);
+    }
+
+    internal static class Converter
+    {
+        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+            DateParseHandling = DateParseHandling.None,
+            Converters =
+            {
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+            },
+        };
     }
 }

@@ -1,12 +1,15 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
+using System.Globalization;
 
 namespace BrawlStarsAPI.Model
 {
+ 
     public partial class Events
     {
         [JsonProperty("current")]
-        public Event[] Current { get; set; }
+        public Event[] Event { get; set; }
 
         [JsonProperty("upcoming")]
         public Event[] Upcoming { get; set; }
@@ -51,9 +54,27 @@ namespace BrawlStarsAPI.Model
         public bool HasModifier { get; set; }
 
         [JsonProperty("modifierId")]
-        public object ModifierId { get; set; }
+        public long? ModifierId { get; set; }
 
         [JsonProperty("modifierName")]
-        public object ModifierName { get; set; }
+        public string ModifierName { get; set; }
+    }
+
+    public partial class Events
+    {
+        public static Events FromJson(string json) => JsonConvert.DeserializeObject<Events>(json, BrawlStarsAPI.Model.EventsConverter.Settings);
+    }
+
+    internal static class EventsConverter
+    {
+        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+            DateParseHandling = DateParseHandling.None,
+            Converters =
+            {
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+            },
+        };
     }
 }

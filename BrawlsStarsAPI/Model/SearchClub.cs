@@ -26,10 +26,6 @@ namespace BrawlStarsAPI.Model
     {
         public static SearchClub[] FromJson(string json) => JsonConvert.DeserializeObject<SearchClub[]>(json);
     }
-
-    public static class Serialize
-    {
-        public static string ToJson(this Club[] self) => JsonConvert.SerializeObject(self);
-    }
+   
 }
 

@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
+using System.Globalization;
 
 namespace BrawlStarsAPI.Model
 {
-
-    public partial class Player
+    public partial class Profile
     {
         [JsonProperty("tag")]
         public string Tag { get; set; }
@@ -45,9 +46,6 @@ namespace BrawlStarsAPI.Model
         [JsonProperty("avatarUrl")]
         public Uri AvatarUrl { get; set; }
 
-        [JsonProperty("bestTimeAsBoss")]
-        public string BestTimeAsBoss { get; set; }
-
         [JsonProperty("bestTimeAsBigBrawler")]
         public string BestTimeAsBigBrawler { get; set; }
 
@@ -63,6 +61,31 @@ namespace BrawlStarsAPI.Model
         [JsonProperty("brawlers")]
         public Brawler[] Brawlers { get; set; }
     }
+
+    public partial class Brawler
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("hasSkin")]
+        public bool HasSkin { get; set; }
+
+        [JsonProperty("skin")]
+        public string Skin { get; set; }
+
+        [JsonProperty("trophies")]
+        public long Trophies { get; set; }
+
+        [JsonProperty("highestTrophies")]
+        public long HighestTrophies { get; set; }
+
+        [JsonProperty("power")]
+        public long Power { get; set; }
+
+        [JsonProperty("rank")]
+        public long Rank { get; set; }
+    }
+
     public partial class PlayerClub
     {
         [JsonProperty("tag")]
@@ -92,28 +115,22 @@ namespace BrawlStarsAPI.Model
         [JsonProperty("onlineMembers")]
         public long OnlineMembers { get; set; }
     }
-    public partial class Brawler
+
+    public partial class Profile
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("hasSkin")]
-        public bool HasSkin { get; set; }
-
-        [JsonProperty("skin")]
-        public string Skin { get; set; }
-
-        [JsonProperty("trophies")]
-        public long Trophies { get; set; }
-
-        [JsonProperty("highestTrophies")]
-        public long HighestTrophies { get; set; }
-
-        [JsonProperty("power")]
-        public long Power { get; set; }
-
-        [JsonProperty("level")]
-        public long Level { get; set; }
+        public static Profile FromJson(string json) => JsonConvert.DeserializeObject<Profile>(json, BrawlStarsAPI.Model.PlayerConverter.Settings);
     }
-    
+
+    internal static class PlayerConverter
+    {
+        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+            DateParseHandling = DateParseHandling.None,
+            Converters =
+            {
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+            },
+        };
+    }
 }

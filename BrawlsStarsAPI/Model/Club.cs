@@ -1,5 +1,4 @@
-﻿using BrawlStarsAPI.Model;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Globalization;
@@ -70,7 +69,17 @@ namespace BrawlStarsAPI.Model
 
     public enum Role { Member, President, Senior, VicePresident };
 
-    internal static class Converter
+    public partial class Club
+    {
+        public static Club FromJson(string json) => JsonConvert.DeserializeObject<Club>(json, ClubConverter.Settings);
+    }
+
+    public static class Serialize
+    {
+        public static string ToJson(this Club self) => JsonConvert.SerializeObject(self, ClubConverter.Settings);
+    }
+
+    internal static class ClubConverter
     {
         public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
@@ -83,7 +92,6 @@ namespace BrawlStarsAPI.Model
             },
         };
     }
-
     internal class RoleConverter : JsonConverter
     {
         public override bool CanConvert(Type t) => t == typeof(Role) || t == typeof(Role?);
@@ -134,4 +142,5 @@ namespace BrawlStarsAPI.Model
 
         public static readonly RoleConverter Singleton = new RoleConverter();
     }
+
 }

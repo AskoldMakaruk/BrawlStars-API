@@ -2,16 +2,16 @@
 
 namespace BrawlStarsAPI.Core
 {
-    internal static class Utils
+    public static class Utils
     {
-        public static string Base => "https://brawlapi.cf/api";
-        public static string Profile => Base + "/player";
-        public static string Club => Base + "/club";
-        public static string Leaderboard => Base + "/leaderboards";
-        public static string Events => Base + "/events";
-        public static string Misc => Base + "/misc";
-        public static string ClubSearch => Base + "/club/search";
-        public static string Constants => "https://fourjr.herokuapp.com/bs/constants/";
+        internal static string Base => "https://brawlapi.cf/api";
+        internal static string Profile => Base + "/player";
+        internal static string Club => Base + "/club";
+        internal static string Leaderboard => Base + "/leaderboards";
+        internal static string Events => Base + "/events";
+        internal static string Misc => Base + "/misc";
+        internal static string ClubSearch => Base + "/club/search";
+        internal static string Constants => "https://fourjr.herokuapp.com/bs/constants/";
 
         public static string[] Brawlers => new[]
         {

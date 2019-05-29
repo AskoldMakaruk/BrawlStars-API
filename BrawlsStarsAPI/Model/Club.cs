@@ -1,82 +1,88 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
+﻿using System;
 using System.Globalization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 namespace BrawlStarsAPI.Model
 {
     public partial class Club
     {
-        [JsonProperty("tag")]
+        [JsonProperty ("tag")]
         public string Tag { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty ("name")]
         public string Name { get; set; }
 
-        [JsonProperty("region")]
+        [JsonProperty ("region")]
         public string Region { get; set; }
 
-        [JsonProperty("badgeId")]
+        [JsonProperty ("badgeId")]
         public long BadgeId { get; set; }
 
-        [JsonProperty("badgeUrl")]
+        [JsonProperty ("badgeUrl")]
         public Uri BadgeUrl { get; set; }
 
-        [JsonProperty("status")]
+        [JsonProperty ("status")]
         public string Status { get; set; }
 
-        [JsonProperty("membersCount")]
+        [JsonProperty ("membersCount")]
         public long MembersCount { get; set; }
 
-        [JsonProperty("onlineMembers")]
+        [JsonProperty ("onlineMembers")]
         public long OnlineMembers { get; set; }
 
-        [JsonProperty("trophies")]
+        [JsonProperty ("trophies")]
         public long Trophies { get; set; }
 
-        [JsonProperty("requiredTrophies")]
+        [JsonProperty ("requiredTrophies")]
         public long RequiredTrophies { get; set; }
 
-        [JsonProperty("description")]
+        [JsonProperty ("description")]
         public string Description { get; set; }
 
-        [JsonProperty("members")]
+        [JsonProperty ("members")]
         public Member[] Members { get; set; }
     }
 
     public partial class Member
     {
-        [JsonProperty("tag")]
+        [JsonProperty ("tag")]
         public string Tag { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty ("name")]
         public string Name { get; set; }
 
-        [JsonProperty("role")]
+        [JsonProperty ("role")]
         public Role Role { get; set; }
 
-        [JsonProperty("expLevel")]
+        [JsonProperty ("expLevel")]
         public long ExpLevel { get; set; }
 
-        [JsonProperty("trophies")]
+        [JsonProperty ("trophies")]
         public long Trophies { get; set; }
 
-        [JsonProperty("avatarId")]
+        [JsonProperty ("onlineLessThanOneHourAgo")]
+        public bool onlineLessThanOneHourAgo { get; set; }
+
+        [JsonProperty ("avatarId")]
         public long AvatarId { get; set; }
 
-        [JsonProperty("avatarUrl")]
+        [JsonProperty ("nameColorCode")]
+        public string NameColorCode { get; set; }
+
+        [JsonProperty ("avatarUrl")]
         public Uri AvatarUrl { get; set; }
     }
 
     public enum Role { Member, President, Senior, VicePresident };
 
-    public partial class Club
-    {
-        public static Club FromJson(string json) => JsonConvert.DeserializeObject<Club>(json, ClubConverter.Settings);
+ public partial class Club
+ {
+ public static Club FromJson (string json) => JsonConvert.DeserializeObject<Club> (json, ClubConverter.Settings);
     }
 
     public static class Serialize
     {
-        public static string ToJson(this Club self) => JsonConvert.SerializeObject(self, ClubConverter.Settings);
+        public static string ToJson (this Club self) => JsonConvert.SerializeObject (self, ClubConverter.Settings);
     }
 
     internal static class ClubConverter
@@ -85,21 +91,20 @@ namespace BrawlStarsAPI.Model
         {
             MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
             DateParseHandling = DateParseHandling.None,
-            Converters =
-            {
-                RoleConverter.Singleton,
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+            Converters = {
+            RoleConverter.Singleton,
+            new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
             },
         };
     }
     internal class RoleConverter : JsonConverter
     {
-        public override bool CanConvert(Type t) => t == typeof(Role) || t == typeof(Role?);
+        public override bool CanConvert (Type t) => t == typeof (Role) || t == typeof (Role?);
 
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        public override object ReadJson (JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
+            var value = serializer.Deserialize<string> (reader);
             switch (value)
             {
                 case "Member":
@@ -111,36 +116,36 @@ namespace BrawlStarsAPI.Model
                 case "Vice President":
                     return Role.VicePresident;
             }
-            throw new Exception("Cannot unmarshal type Role");
+            throw new Exception ("Cannot unmarshal type Role");
         }
 
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        public override void WriteJson (JsonWriter writer, object untypedValue, JsonSerializer serializer)
         {
             if (untypedValue == null)
             {
-                serializer.Serialize(writer, null);
+                serializer.Serialize (writer, null);
                 return;
             }
-            var value = (Role)untypedValue;
+            var value = (Role) untypedValue;
             switch (value)
             {
                 case Role.Member:
-                    serializer.Serialize(writer, "Member");
+                    serializer.Serialize (writer, "Member");
                     return;
                 case Role.President:
-                    serializer.Serialize(writer, "President");
+                    serializer.Serialize (writer, "President");
                     return;
                 case Role.Senior:
-                    serializer.Serialize(writer, "Senior");
+                    serializer.Serialize (writer, "Senior");
                     return;
                 case Role.VicePresident:
-                    serializer.Serialize(writer, "Vice President");
+                    serializer.Serialize (writer, "Vice President");
                     return;
             }
-            throw new Exception("Cannot marshal type Role");
+            throw new Exception ("Cannot marshal type Role");
         }
 
-        public static readonly RoleConverter Singleton = new RoleConverter();
+        public static readonly RoleConverter Singleton = new RoleConverter ();
     }
 
 }

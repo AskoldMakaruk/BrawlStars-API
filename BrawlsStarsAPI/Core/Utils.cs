@@ -4,7 +4,7 @@ namespace BrawlStarsAPI.Core
 {
     public static class Utils
     {
-        internal static string Base => "https://brawlapi.cf/api";
+        internal static string Base => "https://brawlapi.cf/v1";
         internal static string Profile => Base + "/player";
         internal static string Club => Base + "/club";
         internal static string Leaderboard => Base + "/leaderboards";
@@ -13,18 +13,34 @@ namespace BrawlStarsAPI.Core
         internal static string ClubSearch => Base + "/club/search";
         internal static string Constants => "https://fourjr.herokuapp.com/bs/constants/";
 
-        public static string[] Brawlers => new[]
+        public static string[] Brawlers => new []
         {
-            "shelly","nita","colt",
-            "bull","jessie","brock",
-            "dynamike","bo","el primo",
-            "barley","poco","ricochet",
-            "penny","darryl","frank",
-            "pam","piper","mortis",
-            "tara","spike","crow",
-            "leon"
+            "shelly",
+            "nita",
+            "colt",
+            "bull",
+            "jessie",
+            "brock",
+            "dynamike",
+            "bo",
+            "el primo",
+            "barley",
+            "poco",
+            "rico",
+            "penny",
+            "darryl",
+            "frank",
+            "pam",
+            "piper",
+            "mortis",
+            "tara",
+            "spike",
+            "crow",
+            "leon",
+            "carl",
+            "geniue"
         };
-        public static string LeaderboardToString(LeaderboardType type)
+        public static string LeaderboardToString (LeaderboardType type)
         {
             int t = (int) type;
             int i = t - 2;
@@ -34,22 +50,22 @@ namespace BrawlStarsAPI.Core
             }
             else if (t >= 0 && t <= 1)
             {
-                return type.ToString().ToLower();
+                return type.ToString ().ToLower ();
             }
             else return null;
         }
-        public static string ConfirmTag(string tag)
+        public static string ConfirmTag (string tag)
         {
-            var tg = tag.ToUpper().Replace("O", "0").Replace("#", "");
+            var tg = tag.ToUpper ().Replace ("O", "0").Replace ("#", "");
             var allowed = "0289PYLQGRJCUV";
             if (tag.Length < 3)
             {
-                throw new TagFormat();
+                throw new TagFormat ();
             }
 
             foreach (char c in tg)
-                if (!allowed.Contains(c))
-                    throw new TagFormat(c.ToString());
+                if (!allowed.Contains (c))
+                    throw new TagFormat (c.ToString ());
             return tg;
         }
     }
@@ -79,6 +95,8 @@ namespace BrawlStarsAPI.Core
         Tara,
         Spike,
         Crow,
-        Leon
+        Leon,
+        Geniue,
+        Carl
     }
 }

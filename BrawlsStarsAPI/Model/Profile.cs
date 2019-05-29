@@ -13,6 +13,9 @@ namespace BrawlStarsAPI.Model
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("nameColorCode")]
+        public string NameColorCode { get; set; }
+
         [JsonProperty("brawlersUnlocked")]
         public long BrawlersUnlocked { get; set; }
 
